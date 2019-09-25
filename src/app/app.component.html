@@ -24,7 +24,7 @@
     <mat-tab label="Upload">
 
         <form [formGroup]="fileForm" (ngSubmit)="uploadFile()">
-            <input type="file" (change)="onFileChange($event)" formControlName="image" >
+            <input type="file" (change)="handleFileInput($event.target.files)" formControlName="image" >
             <button type="submit">Submit</button>
         </form>
     </mat-tab>

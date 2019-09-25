@@ -160,13 +160,17 @@ export class AppComponent implements OnInit {
     console.log(this.fileForm.controls)
   }
 
+  handleFileInput(files){
+    console.log(files);
+    this.fileinfo = files[0]
+  }
   fileinfo;
   uploadFile(file) {
     console.log(this.fileinfo)
     this.apollo.mutate({
       mutation: upload,
       variables: {
-        file: file
+        file: this.fileinfo
       },
       context:{
         useMultipart: true

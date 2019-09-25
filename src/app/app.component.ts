@@ -4,10 +4,10 @@ import * as uuid from 'uuid';
 
 import { Component, OnInit } from '@angular/core';
 
-import { __Todo, _getlist, newTodo, getList, Todo, _getItem, getItem, addItem, removeItem, updateItem } from './todos';
+import { __Todo, _getlist, newTodo, getList, Todo, _getItem, getItem, addItem, removeItem, updateItem, upload } from './todos';
 import { UpdateTodoService } from './update-todo.service';
 import { Observable } from 'rxjs';
-import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { RxFormBuilder, RxwebValidators } from '@rxweb/reactive-form-validators';
 
 
@@ -51,6 +51,10 @@ export class AppComponent implements OnInit {
     text: [''],
     completed: ['']
   })
+
+  fileForm = this.fb.group({
+    image: [null, [Validators.required]]
+  })
   onkey(value: string) {
     this.selectedId = +value;
   }
@@ -68,9 +72,9 @@ export class AppComponent implements OnInit {
   xForm = this.rfb.group({
     text: ['', RxwebValidators.required,],
     completed: ['', RxwebValidators.required],
-    another: ['' ,RxwebValidators.creditCard]
+    another: ['', RxwebValidators.creditCard]
   })
-  
+
   ngOnInit(): void {
     const t: __Todo = {
       id: "2d5401a5-5f17-4abd-af36-94f6ed428d29",
@@ -142,6 +146,41 @@ export class AppComponent implements OnInit {
       }
     })
   }
+  onFileChange(event){
+    let reader = new FileReader();
+    if(event.target.files && event.target.files.lenth > 0){
+      let file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.fileForm.patchValue({
+          file: reader.result[0]
+        })
+      }
+    }
+    console.log(this.fileForm.controls)
+  }
+
+  fileinfo;
+  uploadFile(file) {
+    console.log(this.fileinfo)
+    this.apollo.mutate({
+      mutation: upload,
+      variables: {
+        file: file
+      },
+      context:{
+        useMultipart: true
+      },
+      update: () => {
+
+      }
+    }).subscribe()
+  }
+
+  submit() {
+
+  }
+
   __addTodo(t: __Todo) {
     const data = this.apollo.getClient().readQuery({ query: getList });
     this.apollo.getClient().writeQuery({

@@ -10,6 +10,13 @@ export type TodoInput = Partial<Todo>
 
 export type __Todo = Todo & { __typename: string }
 
+export const upload = gql`
+  mutation($file: Upload!){
+    uploadFile(file: $file){
+      path
+    }
+  }
+`;
 export const getList = gql`
     query getList {
       todos {

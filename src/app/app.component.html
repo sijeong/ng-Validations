@@ -10,7 +10,7 @@
     </mat-tab>
     <mat-tab label="Add">
         <form [formGroup]="todoForm" (ngSubmit)="onSubmit()">
-            <input type="text" formControlName="text"/>
+            <input type="text" formControlName="text" />
             <input type="checkbox" formControlName="completed">
         </form>
         <button mat-button (click)="addTodo()">add item</button>
@@ -20,5 +20,12 @@
         <input #did (keyup)="onkeyd(did.value)">
         <button mat-button (click)="removeTodo()">delete item</button>
         <pre>{{op_result$ | async | json}}</pre>
+    </mat-tab>
+    <mat-tab label="Upload">
+
+        <form [formGroup]="fileForm" (ngSubmit)="uploadFile()">
+            <input type="file" (change)="onFileChange($event)" formControlName="image" >
+            <button type="submit">Submit</button>
+        </form>
     </mat-tab>
 </mat-tab-group>
